@@ -32,7 +32,8 @@ public class ForecastAdaptor extends RecyclerView.Adapter<ForecastAdaptor.Foreca
 
     @Override
     public ForecastViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_forecast_cell, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_forecast_cell, parent,false);
+
         ForecastViewHolder holder = new ForecastViewHolder(view);
         return holder;
     }
@@ -41,7 +42,6 @@ public class ForecastAdaptor extends RecyclerView.Adapter<ForecastAdaptor.Foreca
     public void onBindViewHolder(ForecastViewHolder holder, int position) {
 
         Forecast forecast = data.get(position);
-
         holder.imageView.setImageDrawable(drawableForWeatherIconID(forecast.weatherIcon()));
         holder.forecastDescription.setText(forecast.weatherDescription());
         holder.headerTextView.setText(forecast.headerText());

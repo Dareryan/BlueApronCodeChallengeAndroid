@@ -49,11 +49,11 @@ public class Forecast {
             this.weatherIconID = iconID;
         }
 
-        Map<String, String> tempDict = (Map<String, String>) response.get("main");
+        Map<String, Double> tempDict = (Map<String, Double>) response.get("main");
         if(tempDict != null) {
-            this.minimumTemp = Double.valueOf(tempDict.get("temp_min"));
-            this.maximumTemp = Double.valueOf(tempDict.get("temp_max"));
-            this.currentTemp = Double.valueOf(tempDict.get("temp"));
+            this.minimumTemp = (tempDict.get("temp_min"));
+            this.maximumTemp = (tempDict.get("temp_max"));
+            this.currentTemp = (tempDict.get("temp"));
         }
     }
 
