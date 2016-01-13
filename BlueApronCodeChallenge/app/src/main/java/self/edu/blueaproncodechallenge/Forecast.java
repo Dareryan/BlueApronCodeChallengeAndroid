@@ -44,7 +44,7 @@ public class Forecast {
             this.weatherDescription = description;
         }
 
-        String iconID = (String) response.get("icon");
+        String iconID = (String)((Map<String, Object>) weather.get(0)).get("icon");
         if (iconID != null) {
             this.weatherIconID = iconID;
         }
