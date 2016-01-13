@@ -1,12 +1,17 @@
 package self.edu.blueaproncodechallenge;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
 
+import java.lang.ref.SoftReference;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Dictionary;
+import java.util.List;
 import java.util.PriorityQueue;
 
 /**
@@ -17,9 +22,37 @@ public class Forecast {
     private Date date = new Date();
     private String weatherDescription = "";
     private String  weatherIconID = "";
+    private String location = "";
     private Double currentTemp = 0.0;
     private Double minimumTemp = 0.0;
     private Double maximumTemp = 0.0;
+
+
+    public Forecast(Dictionary response) {
+
+        String date = (String) response.get("dt");
+        if(date != null) {
+            this.date = new Date(Long.parseLong(date) * 1000);
+        }
+
+        List weather = (List<Dictionary<String, ?>>) response.get("weather");
+        String description = (String)((Dictionary<String, ?>) weather.get(0)).get("description");
+        if(description != null) {
+            this.weatherDescription = description;
+        }
+
+        String iconID = (String) response.get("icon");
+        if (iconID != null) {
+            this.weatherIconID = iconID;
+        }
+
+        Dictionary<String, String> tempDict = (Dictionary<String, String>) response.get("main");
+        if(tempDict != null) {
+            this.minimumTemp = Double.valueOf(tempDict.get("temp_min");
+            this.maximumTemp = Double.valueOf(tempDict.get("temp_max"));
+            this.currentTemp = Double.valueOf(tempDict.get("temp"));
+        }
+    }
 
 
     public Drawable weatherIcon() {
@@ -32,7 +65,7 @@ public class Forecast {
 
     public  String headerText() {
         String date = new SimpleDateFormat("MMMM dd").format(this.date);
-        return String.format("%s  %s", date, date);
+        return String.format("%s  %s", date, this.location);
     }
 
     public String currentTemp() {
@@ -47,7 +80,7 @@ public class Forecast {
         return String.format("%.1f", this.maximumTemp);
     }
 
-    private Drawable drawableForWeatherIconID(String id) {
+    private static Drawable drawableForWeatherIconID(String id) {
         switch (id) {
             case "01d":
                 return Resources.getSystem().getDrawable(R.drawable.image_01d, null);

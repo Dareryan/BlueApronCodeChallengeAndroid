@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Dare on 1/12/16.
  */
@@ -15,6 +18,7 @@ import android.view.ViewGroup;
 public class ForecastsFragment extends Fragment {
 
     private RecyclerView recyclerView;
+    private ForecastAdaptor adaper;
 
     @Nullable
     @Override
@@ -24,5 +28,9 @@ public class ForecastsFragment extends Fragment {
         return layout;
     }
 
+    public static void getData() {
+        List<Forecast> data = new ArrayList<>();
+
+    }
 
 }
