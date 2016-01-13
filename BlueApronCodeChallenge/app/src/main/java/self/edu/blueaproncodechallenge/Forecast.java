@@ -56,29 +56,7 @@ public class Forecast {
             this.currentTemp = (tempDict.get("temp"));
         }
     }
-
-    public static Map fakeForecastDictionary() {
-        Map<String, Object> forecast = new HashMap<>();
-        forecast.put("dt",  1452654000);
-
-        Map<String, String> weatherMap = new HashMap<>();
-        weatherMap.put("description", "Sunny");
-        ArrayList<Map<String, String>> weatherList = new ArrayList<Map<String, String>>();
-        weatherList.add(weatherMap);
-        forecast.put("weather", weatherList);
-
-        forecast.put("icon", "01d");
-
-        Map<String, String> tempDict = new HashMap<>();
-        tempDict.put("temp_min", "98.442");
-        tempDict.put("temp_max", "100.256");
-        tempDict.put("temp", "95.334");
-
-        forecast.put("main", tempDict);
-
-        return forecast;
-    }
-
+    
     public String weatherIcon() {
         return weatherIconID;
     }
@@ -88,19 +66,19 @@ public class Forecast {
     }
 
     public  String headerText() {
-        String date = new SimpleDateFormat("MMMM dd").format(this.date);
+        String date = new SimpleDateFormat("MMMM dd h:mm a").format(this.date);
         return date;
     }
 
     public String currentTemp() {
-        return String.format("%.1f", this.currentTemp);
+        return String.format("%.1f˚F", this.currentTemp);
     }
 
     public String minTemp() {
-        return String.format("%.1f", this.minimumTemp);
+        return String.format("%.1f˚F", this.minimumTemp);
     }
 
     public String maxTemp() {
-        return String.format("%.1f", this.maximumTemp);
+        return String.format("%.1f˚F", this.maximumTemp);
     }
 }
