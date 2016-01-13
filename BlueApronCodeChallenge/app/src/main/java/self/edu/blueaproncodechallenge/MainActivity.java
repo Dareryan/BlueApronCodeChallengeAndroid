@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Forecast> forecastList;
     private RecyclerView recyclerView;
     private ForecastAdaptor adapter;
+    private String city = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +43,6 @@ public class MainActivity extends AppCompatActivity {
         new AsyncHttpTask().execute(url);
     }
 
-    public List<Forecast> loadData() {
-        List<Forecast> data = new ArrayList<>();
-
-
-        return forecastList;
-    }
 
     public class AsyncHttpTask extends AsyncTask<String, Void, Integer> {
 
@@ -91,8 +86,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Integer result) {
             if (result == 1) {
-                adapter = new ForecastAdaptor(getApplicationContext(), loadData());
+                adapter = new ForecastAdaptor(getApplicationContext(), forecastList);
                 recyclerView.setAdapter(adapter);
+                getSupportActionBar().setTitle(city);
             }
         }
     }
@@ -100,6 +96,12 @@ public class MainActivity extends AppCompatActivity {
     private void parseResult(String result) {
         try {
             JSONObject response = new JSONObject(result);
+
+            String cityString = (String) ((HashMap<String, String>)toMap(response).get("city")).get("name");
+            if (cityString != null) {
+                city = cityString;
+            }
+
             JSONArray posts = response.optJSONArray("list");
 
             if (null == forecastList) {
@@ -115,8 +117,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public static Map<String, Object> toMap(JSONObject object) throws JSONException {

@@ -56,7 +56,7 @@ public class Forecast {
             this.currentTemp = (tempDict.get("temp"));
         }
     }
-    
+
     public String weatherIcon() {
         return weatherIconID;
     }
