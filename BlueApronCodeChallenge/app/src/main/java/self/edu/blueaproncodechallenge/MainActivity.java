@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
                 int statusCode = urlConnection.getResponseCode();
 
-                if (statusCode ==  200) {
+                if (statusCode == 200) {
 
                     BufferedReader r = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
                     StringBuilder response = new StringBuilder();
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
                     parseResult(response.toString());
                     result = 1; // Successful
-                }else{
+                } else {
                     result = 0; //"Failed to fetch data!";
                 }
 
@@ -91,69 +91,65 @@ public class MainActivity extends AppCompatActivity {
                 getSupportActionBar().setTitle(city);
             }
         }
-    }
 
-    private void parseResult(String result) {
-        try {
-            JSONObject response = new JSONObject(result);
 
-            String cityString = (String) ((HashMap<String, String>)toMap(response).get("city")).get("name");
-            if (cityString != null) {
-                city = cityString;
+        private void parseResult(String result) {
+            try {
+                JSONObject response = new JSONObject(result);
+
+                String cityString = (String) ((HashMap<String, String>) toMap(response).get("city")).get("name");
+                if (cityString != null) {
+                    city = cityString;
+                }
+
+                JSONArray posts = response.optJSONArray("list");
+
+                if (null == forecastList) {
+                    forecastList = new ArrayList<Forecast>();
+                }
+
+                for (int i = 0; i < posts.length(); i++) {
+                    JSONObject post = posts.optJSONObject(i);
+
+                    Forecast item = new Forecast(toMap(post));
+                    forecastList.add(item);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+        }
 
-            JSONArray posts = response.optJSONArray("list");
+        public  Map<String, Object> toMap(JSONObject object) throws JSONException {
+            Map<String, Object> map = new HashMap<String, Object>();
 
-            if (null == forecastList) {
-                forecastList = new ArrayList<Forecast>();
+            Iterator<String> keysItr = object.keys();
+            while (keysItr.hasNext()) {
+                String key = keysItr.next();
+                Object value = object.get(key);
+
+                if (value instanceof JSONArray) {
+                    value = toList((JSONArray) value);
+                } else if (value instanceof JSONObject) {
+                    value = toMap((JSONObject) value);
+                }
+                map.put(key, value);
             }
+            return map;
+        }
 
-            for (int i = 0; i < posts.length(); i++) {
-                JSONObject post = posts.optJSONObject(i);
-
-                Forecast item = new Forecast(toMap(post));
-                forecastList.add(item);
+        public List<Object> toList(JSONArray array) throws JSONException {
+            List<Object> list = new ArrayList<Object>();
+            for (int i = 0; i < array.length(); i++) {
+                Object value = array.get(i);
+                if (value instanceof JSONArray) {
+                    value = toList((JSONArray) value);
+                } else if (value instanceof JSONObject) {
+                    value = toMap((JSONObject) value);
+                }
+                list.add(value);
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+            return list;
         }
     }
-
-    public static Map<String, Object> toMap(JSONObject object) throws JSONException {
-        Map<String, Object> map = new HashMap<String, Object>();
-
-        Iterator<String> keysItr = object.keys();
-        while(keysItr.hasNext()) {
-            String key = keysItr.next();
-            Object value = object.get(key);
-
-            if(value instanceof JSONArray) {
-                value = toList((JSONArray) value);
-            }
-
-            else if(value instanceof JSONObject) {
-                value = toMap((JSONObject) value);
-            }
-            map.put(key, value);
-        }
-        return map;
-    }
-
-    public static List<Object> toList(JSONArray array) throws JSONException {
-        List<Object> list = new ArrayList<Object>();
-        for(int i = 0; i < array.length(); i++) {
-            Object value = array.get(i);
-            if(value instanceof JSONArray) {
-                value = toList((JSONArray) value);
-            }
-
-            else if(value instanceof JSONObject) {
-                value = toMap((JSONObject) value);
-            }
-            list.add(value);
-        }
-        return list;
-    }
-
 
 }
