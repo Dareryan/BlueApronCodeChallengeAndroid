@@ -2,6 +2,8 @@ package self.edu.blueaproncodechallenge;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,15 +22,17 @@ public class ForecastAdaptor extends RecyclerView.Adapter<ForecastAdaptor.Foreca
 
     private LayoutInflater inflater;
     List<Forecast> data = Collections.emptyList();
+    private Context context;
 
     public ForecastAdaptor(Context context, List<Forecast> data) {
         inflater = LayoutInflater.from(context);
         this.data = data;
+        this.context = context;
     }
 
     @Override
     public ForecastViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.view_forecast_cell, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_forecast_cell, null);
         ForecastViewHolder holder = new ForecastViewHolder(view);
         return holder;
     }
@@ -38,7 +42,7 @@ public class ForecastAdaptor extends RecyclerView.Adapter<ForecastAdaptor.Foreca
 
         Forecast forecast = data.get(position);
 
-        holder.imageView.setImageDrawable(forecast.weatherIcon());
+        holder.imageView.setImageDrawable(drawableForWeatherIconID(forecast.weatherIcon()));
         holder.forecastDescription.setText(forecast.weatherDescription());
         holder.headerTextView.setText(forecast.headerText());
         holder.currentTempTextView.setText(forecast.currentTemp());
@@ -48,7 +52,7 @@ public class ForecastAdaptor extends RecyclerView.Adapter<ForecastAdaptor.Foreca
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return (null != data ? data.size() : 0);
     }
 
     class ForecastViewHolder extends RecyclerView.ViewHolder{
@@ -69,6 +73,50 @@ public class ForecastAdaptor extends RecyclerView.Adapter<ForecastAdaptor.Foreca
             highTempTextView = (TextView) itemView.findViewById(R.id.maxTempTextView);
             lowTempTextView = (TextView) itemView.findViewById(R.id.minTempTextView);
         }
+    }
+
+    private Drawable drawableForWeatherIconID(String id) {
+        switch (id) {
+            case "01d":
+                return context.getDrawable(R.drawable.image_01d);
+            case "02d":
+                return context.getDrawable(R.drawable.image_02d);
+            case "03d":
+                return context.getDrawable(R.drawable.image_03d);
+            case "04d":
+                return context.getDrawable(R.drawable.image_04d);
+            case "09d":
+                return context.getDrawable(R.drawable.image_09d);
+            case "10d":
+                return context.getDrawable(R.drawable.image_10d);
+            case "11d":
+                return context.getDrawable(R.drawable.image_11d);
+            case "13d":
+                return context.getDrawable(R.drawable.image_13d);
+            case "50d":
+                return context.getDrawable(R.drawable.image_50d);
+            case "01n":
+                return context.getDrawable(R.drawable.image_01n);
+            case "02n":
+                return context.getDrawable(R.drawable.image_02n);
+            case "03n":
+                return context.getDrawable(R.drawable.image_03n);
+            case "04n":
+                return context.getDrawable(R.drawable.image_04n);
+            case "09n":
+                return context.getDrawable(R.drawable.image_09n);
+            case "10n":
+                return context.getDrawable(R.drawable.image_10n);
+            case "11n":
+                return context.getDrawable(R.drawable.image_11n);
+            case "13n":
+                return context.getDrawable(R.drawable.image_13n);
+            case "50n":
+                return context.getDrawable(R.drawable.image_50n);
+            default:
+                return context.getDrawable(R.drawable.image_01d);
+        }
+
     }
 }
 
